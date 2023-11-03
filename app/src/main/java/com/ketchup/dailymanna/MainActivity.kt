@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import com.ketchup.dailymanna.ui.screens.FavoritesScreen
 import com.ketchup.dailymanna.ui.screens.MainScreen
 import com.ketchup.dailymanna.ui.theme.MannaNaCoDzieńTheme
 import com.ketchup.dailymanna.viewmodel.ViewModel
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val mannaDao = AppDatabase.getInstance(this).mannaTextDao()
+        val viewModel = ViewModel(mannaDao, application)
 
         fun initializeDatabase() {
             val mannaCount = mannaDao.getAllMannaTexts().size
@@ -41,7 +43,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(viewModel = ViewModel(mannaDao))
+                    MainScreen(viewModel = viewModel, false, this@MainActivity)
+                    //FavoritesScreen(viewModel = viewModel)
                 }
             }
         }

@@ -11,4 +11,16 @@ class MannaRepository(val mannaTextDao: MannaTextDao) {
             mannaTextDao.getAllMannaTexts()
         }
     }
+
+    suspend fun getAllFavorites(): List<MannaTextEntity> {
+        return withContext(Dispatchers.IO) {
+            mannaTextDao.getAllFavorites()
+        }
+    }
+
+    suspend fun updateMannaText(mannaTextEntity: MannaTextEntity) {
+        withContext(Dispatchers.IO){
+            mannaTextDao.updateMannaText(mannaTextEntity)
+        }
+    }
 }

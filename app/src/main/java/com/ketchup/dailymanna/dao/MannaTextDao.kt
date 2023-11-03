@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.ketchup.dailymanna.model.MannaTextEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -19,4 +20,9 @@ interface MannaTextDao {
 
     @Query("SELECT * FROM manna_texts")
     fun getAllMannaTexts(): List<MannaTextEntity>
+
+    @Query("SELECT * FROM manna_texts WHERE isFavorite = 1")
+    fun getAllFavorites(): List<MannaTextEntity>
+    @Update
+    fun updateMannaText(mannaText: MannaTextEntity)
 }

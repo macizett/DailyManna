@@ -63,6 +63,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
     implementation("androidx.compose.runtime:runtime-livedata")
     implementation("androidx.room:room-runtime:2.4.2")
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.room:room-ktx:2.4.1")
     kapt("androidx.room:room-compiler:2.4.2")
     implementation("androidx.compose.material3:material3")
