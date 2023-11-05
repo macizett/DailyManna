@@ -1,8 +1,10 @@
 package com.ketchup.dailymanna
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.contextaware.withContextAvailable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -15,6 +17,7 @@ import com.ketchup.dailymanna.ui.Navigator
 import com.ketchup.dailymanna.viewmodel.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,26 +26,41 @@ class MainActivity : ComponentActivity() {
         val mannaDao = AppDatabase.getInstance(this).mannaTextDao()
         val viewModel = ViewModel(mannaDao, application, this)
 
-        fun initializeDatabase() {
-            val mannaCount = mannaDao.getAllMannaTexts().size
+        val sharedPreferences = application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
 
-            if (mannaCount == 0) {
-                contentParser.parseAndInsertMannaPages(this, lifecycleScope,"MannaText.json", mannaDao)
+        fun initializeDatabase() {
+            lifecycleScope.launch(Dispatchers.IO) {
+                    contentParser.parseAndInsertMannaPages(this@MainActivity, lifecycleScope,"MannaText.json", mannaDao)
+                    withContext(Dispatchers.Main){
+
+                        sharedPreferences.edit().putInt("databaseStatement", 1).apply()
+                        setContent {
+                            DailyMannaTheme {
+                                Surface(
+                                    modifier = Modifier.fillMaxSize(),
+                                    color = MaterialTheme.colorScheme.background
+                                ) {
+                                    Navigator(viewModel = viewModel, context = this@MainActivity)
+                                }
+                            }
+                        }
+                    }
             }
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        if (sharedPreferences.getInt("databaseStatement", 0) == 0) {
             initializeDatabase()
         }
-
-        setContent {
-            DailyMannaTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Navigator(viewModel = viewModel, context = this@MainActivity)
+        else{
+            setContent {
+                DailyMannaTheme {
+                    // A surface container using the 'background' color from the theme
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        Navigator(viewModel = viewModel, context = this@MainActivity)
+                    }
                 }
             }
         }

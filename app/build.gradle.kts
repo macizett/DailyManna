@@ -67,7 +67,7 @@ dependencies {
     implementation("androidx.room:room-ktx:2.4.1")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.5")
     implementation("androidx.navigation:navigation-compose:2.7.5")
-    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
     kapt("androidx.room:room-compiler:2.4.2")
     implementation("androidx.compose.material3:material3")
     testImplementation("junit:junit:4.13.2")

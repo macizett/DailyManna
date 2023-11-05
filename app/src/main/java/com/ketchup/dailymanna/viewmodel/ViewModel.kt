@@ -53,7 +53,7 @@ class ViewModel(var mannaTextDao: MannaTextDao, var application: Application, va
     }
 
     fun savePageIndex(index: Int) {
-        sharedPreferences.edit().putInt("pageIndex", index).commit()
+        sharedPreferences.edit().putInt("pageIndex", index).apply()
     }
 
     fun getSavedPageIndex(): Int {

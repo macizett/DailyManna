@@ -129,7 +129,8 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, context: Cont
                             Modifier
                                 .fillMaxWidth()
                                 ){
-                            IconButton(onClick = { navController.navigate("FavoritesScreen") }, modifier = Modifier.weight(1f).fillMaxHeight()) {
+                            IconButton(onClick = {
+                                navController.navigate("FavoritesScreen") }, modifier = Modifier.weight(1f).fillMaxHeight()) {
                                 Icon(Icons.Filled.Favorite, contentDescription = "Favorites Button", modifier = Modifier.graphicsLayer {
                                     scaleX = 1.4f
                                     scaleY = 1.4f
@@ -137,7 +138,7 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, context: Cont
                                     tint = MaterialTheme.colorScheme.onBackground)
                             }
 
-                            IconButton(onClick = {  }, modifier = Modifier.weight(1f).fillMaxHeight()) {
+                            IconButton(onClick = { navController.navigate("SelectorScreen") }, modifier = Modifier.weight(1f).fillMaxHeight()) {
                                 Icon(Icons.Filled.Menu, contentDescription = "SelectorScreen", modifier = Modifier.graphicsLayer {
                                     scaleX = 1.4f
                                     scaleY = 1.4f
