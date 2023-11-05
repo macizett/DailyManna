@@ -1,0 +1,28 @@
+package com.ketchup.dailymanna.ui
+
+import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHost
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.composable
+import com.ketchup.dailymanna.ui.screens.FavoritesScreen
+import com.ketchup.dailymanna.ui.screens.MainScreen
+import com.ketchup.dailymanna.viewmodel.ViewModel
+
+@Composable
+fun Navigator(viewModel: ViewModel, context: Context) {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "MainScreen"){
+        composable("MainScreen") { MainScreen(
+            navController = navController,
+            viewModel = viewModel,
+            context = context,
+            initialPageIndex = viewModel.getSavedPageIndex()
+        )}
+
+        composable("FavoritesScreen") {
+            FavoritesScreen(viewModel = viewModel, navController)
+        }
+    }
+}

@@ -10,9 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
-import com.ketchup.dailymanna.ui.screens.FavoritesScreen
-import com.ketchup.dailymanna.ui.screens.MainScreen
-import com.ketchup.dailymanna.ui.theme.MannaNaCoDzieńTheme
+import com.example.compose.DailyMannaTheme
+import com.ketchup.dailymanna.ui.Navigator
 import com.ketchup.dailymanna.viewmodel.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,7 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val mannaDao = AppDatabase.getInstance(this).mannaTextDao()
-        val viewModel = ViewModel(mannaDao, application)
+        val viewModel = ViewModel(mannaDao, application, this)
 
         fun initializeDatabase() {
             val mannaCount = mannaDao.getAllMannaTexts().size
@@ -37,14 +36,13 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            MannaNaCoDzieńTheme {
+            DailyMannaTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(viewModel = viewModel, false, this@MainActivity)
-                    //FavoritesScreen(viewModel = viewModel)
+                    Navigator(viewModel = viewModel, context = this@MainActivity)
                 }
             }
         }
@@ -54,7 +52,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MannaNaCoDzieńTheme {
+    DailyMannaTheme {
 
     }
 }

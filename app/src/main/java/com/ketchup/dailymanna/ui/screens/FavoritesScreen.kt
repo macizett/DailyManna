@@ -1,6 +1,7 @@
 package com.ketchup.dailymanna.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,20 +34,24 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.ketchup.dailymanna.model.MannaTextEntity
 import com.ketchup.dailymanna.viewmodel.ViewModel
 
 @Composable
-fun FavoritesScreen(viewModel: ViewModel){
+fun FavoritesScreen(viewModel: ViewModel, navController: NavController){
     LaunchedEffect(key1 = "loadTexts") {
         viewModel.getAllFavorites()
     }
 
-    val allMannaTexts by viewModel.allMannaTexts.observeAsState(initial = emptyList())
+    val allMannaTexts by viewModel.allFavoriteMannaTexts.observeAsState(initial = emptyList())
 
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.elevatedCardElevation(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background,
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 10.dp, bottom = 10.dp, start = 8.dp, end = 8.dp)
@@ -57,14 +63,14 @@ fun FavoritesScreen(viewModel: ViewModel){
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "Brak ulubionych - śmiało, dodaj coś!", fontSize = 16.sp, color = Color.LightGray, modifier = Modifier.align(
+                Text(text = "Brak ulubionych - śmiało, dodaj coś!", fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.align(
                     Alignment.Center))
             }
         }
         else{
             LazyColumn {
                 items(allMannaTexts) { item ->
-                    MannaItem(item, viewModel)
+                    MannaItem(item, viewModel, navController)
                 }
             }
         }
@@ -72,14 +78,18 @@ fun FavoritesScreen(viewModel: ViewModel){
 }
 
 @Composable
-fun MannaItem(item: MannaTextEntity, viewModel: ViewModel){
+fun MannaItem(item: MannaTextEntity, viewModel: ViewModel, navController: NavController){
     Row(modifier = Modifier
-        .fillMaxWidth()
-        .height(42.dp)) {
+        .fillMaxWidth().clickable {
+
+            viewModel.savePageIndex(item.id)
+            navController.navigate("MainScreen")
+
+        }) {
         
         Text(text = item.title, fontSize = 16.sp, modifier = Modifier
             .align(Alignment.CenterVertically)
-            .padding(start = 8.dp, end = 8.dp)
+            .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
             .weight(1f))
 
         val checkedState = remember { mutableStateOf(item.isFavorite) }
@@ -93,11 +103,7 @@ fun MannaItem(item: MannaTextEntity, viewModel: ViewModel){
             modifier = Modifier.align(Alignment.CenterVertically) // Align the button vertically
         ) {
             Icon(
-                tint = if (checkedState.value) {
-                    Color.Cyan
-                } else {
-                    Color.LightGray
-                },
+                tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .graphicsLayer {
                         scaleX = 1.3f
@@ -115,6 +121,6 @@ fun MannaItem(item: MannaTextEntity, viewModel: ViewModel){
     }
     Spacer(modifier = Modifier
         .fillMaxWidth()
-        .height(2.dp)
-        .background(Color.Gray))
+        .height(1.dp)
+        .background(MaterialTheme.colorScheme.outlineVariant))
 }
