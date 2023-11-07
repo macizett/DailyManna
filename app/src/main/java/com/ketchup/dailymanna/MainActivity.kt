@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.contextaware.withContextAvailable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -13,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.example.compose.DailyMannaTheme
-import com.ketchup.dailymanna.ui.Navigator
+import com.ketchup.dailymanna.ui.NavController
 import com.ketchup.dailymanna.viewmodel.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +39,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.fillMaxSize(),
                                     color = MaterialTheme.colorScheme.background
                                 ) {
-                                    Navigator(viewModel = viewModel, context = this@MainActivity)
+                                    NavController(viewModel = viewModel, context = this@MainActivity)
                                 }
                             }
                         }
@@ -59,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        Navigator(viewModel = viewModel, context = this@MainActivity)
+                        NavController(viewModel = viewModel, context = this@MainActivity)
                     }
                 }
             }

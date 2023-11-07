@@ -1,6 +1,5 @@
 package com.ketchup.dailymanna.ui.screens
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -27,7 +25,7 @@ import androidx.navigation.NavController
 import com.ketchup.dailymanna.viewmodel.ViewModel
 
 @Composable
-fun FavoritesScreen(viewModel: ViewModel, navController: NavController){
+fun FavoritesScreen(viewModel: ViewModel, navController: NavController) {
 
     val allMannaTexts by viewModel.allFavoriteMannaTexts.observeAsState(initial = emptyList())
 
@@ -35,9 +33,10 @@ fun FavoritesScreen(viewModel: ViewModel, navController: NavController){
         viewModel.getAllFavorites()
     }
 
-    Column(modifier = Modifier.fillMaxSize()){
+    Column(modifier = Modifier.fillMaxSize()) {
 
-        Text(text = "Ulubione",
+        Text(
+            text = "Ulubione",
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
@@ -47,7 +46,8 @@ fun FavoritesScreen(viewModel: ViewModel, navController: NavController){
                     end = 12.dp,
                     start = 12.dp,
                     bottom = 6.dp
-                ))
+                )
+        )
 
         Card(
             shape = RoundedCornerShape(16.dp),
@@ -58,20 +58,24 @@ fun FavoritesScreen(viewModel: ViewModel, navController: NavController){
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp, bottom = 10.dp, start = 8.dp, end = 8.dp)
-        ){
-            if(allMannaTexts.isEmpty()){
+        ) {
+            if (allMannaTexts.isEmpty()) {
                 Box(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Brak ulubionych - śmiało, dodaj coś!", fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.align(
-                        Alignment.Center))
+                    Text(
+                        text = "Brak ulubionych - śmiało, dodaj coś!",
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.align(
+                            Alignment.Center
+                        )
+                    )
                 }
-            }
-            else{
-
+            } else {
                 LazyColumn{
                     items(allMannaTexts) { item ->
                         MannaRowItem(item, viewModel, navController)
