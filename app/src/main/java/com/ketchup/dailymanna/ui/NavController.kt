@@ -11,13 +11,12 @@ import com.ketchup.dailymanna.ui.screens.SelectorScreen
 import com.ketchup.dailymanna.viewmodel.ViewModel
 
 @Composable
-fun NavController(viewModel: ViewModel, context: Context) {
+fun NavController(viewModel: ViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "MainScreen"){
         composable("MainScreen") { MainScreen(
             navController = navController,
             viewModel = viewModel,
-            context = context,
             initialPageIndex =  viewModel.getSavedPageIndex()
         )}
 

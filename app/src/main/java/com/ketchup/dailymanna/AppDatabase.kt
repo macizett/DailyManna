@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.ketchup.dailymanna.model.MannaTextEntity
 
 
-@Database(entities = [MannaTextEntity::class], version = 15, exportSchema = false)
+@Database(entities = [MannaTextEntity::class], version = 16, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun mannaTextDao(): MannaTextDao
 

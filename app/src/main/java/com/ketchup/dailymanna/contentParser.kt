@@ -24,9 +24,10 @@ object contentParser {
             val text = contentJsonObject.getString("text")
             val bibleText = contentJsonObject.getString("bibleText")
             val id = contentJsonObject.getInt("id")
+            val bookID = contentJsonObject.getInt("bookID")
 
 
-            val mannaText = MannaTextEntity(id = id, title = title, text = text, bibleText = bibleText)
+            val mannaText = MannaTextEntity(id = id, bookID = bookID, title = title, text = text, bibleText = bibleText)
             mannaTextEntities.add(mannaText)
         }
 

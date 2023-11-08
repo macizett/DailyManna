@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.fillMaxSize(),
                                     color = MaterialTheme.colorScheme.background
                                 ) {
-                                    NavController(viewModel = viewModel, context = this@MainActivity)
+                                    NavController(viewModel = viewModel)
                                 }
                             }
                         }
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        NavController(viewModel = viewModel, context = this@MainActivity)
+                        NavController(viewModel = viewModel)
                     }
                 }
             }

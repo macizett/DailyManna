@@ -10,5 +10,6 @@ data class MannaTextEntity(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "text") val text: String,
     @ColumnInfo(name = "bibleText") val bibleText: String,
+    @ColumnInfo(name = "bookID") val bookID: Int,
     @ColumnInfo(name = "isFavorite") var isFavorite: Boolean = false
 )

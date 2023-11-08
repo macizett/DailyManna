@@ -2,10 +2,13 @@
 
 package com.ketchup.dailymanna.ui.screens
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.text.Layout
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,11 +27,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.IconToggleButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Menu
@@ -43,6 +48,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -57,10 +63,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import com.ketchup.dailymanna.R
 import com.ketchup.dailymanna.viewmodel.ViewModel
@@ -69,9 +78,35 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 
 @Composable
-fun MainScreen(navController: NavController, viewModel: ViewModel, context: Context, initialPageIndex: Int) {
+fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIndex: Int) {
 
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+    var showExitConfirmationDialog by remember { mutableStateOf(false) }
+
+    BackHandler(enabled = true) {
+        showExitConfirmationDialog = true
+    }
+
+    if (showExitConfirmationDialog) {
+
+        androidx.compose.material3.AlertDialog(
+            onDismissRequest = { showExitConfirmationDialog = false },
+            confirmButton = {TextButton(
+                onClick = { ActivityCompat.finishAffinity(context as Activity) }
+            ) {
+                Text("Tak")
+            } },
+            dismissButton = {TextButton(
+                onClick = { showExitConfirmationDialog = false }
+            ) {
+                Text("Nie")
+            }},
+            icon = { Icon(painter = painterResource(id = R.drawable.baseline_book_24), contentDescription = "exitAppIcon", tint = MaterialTheme.colorScheme.onBackground) },
+            text = { Text(text = "Na pewno chcesz zamknąć aplikację?") })
+
+    }
 
     LaunchedEffect(key1 = "loadTexts") {
         viewModel.loadAllMannaTexts()
@@ -90,24 +125,26 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, context: Cont
 
     LaunchedEffect(key1 = "scrollTo"){
         coroutineScope.launch {
-            pagerState.scrollToPage(initialPageIndex)
+            pagerState.animateScrollToPage(initialPageIndex)
         }
     }
 
-    val titles = listOf("Kartka", "Biblia") // List of tab titles
+    val titles = listOf("Kartka", "Biblia")
     val tabIcons = listOf(R.drawable.baseline_menu_book_24, R.drawable.baseline_book_24)
-    var tabIndex by remember { mutableStateOf(0) } // Current selected tab index
+    var tabIndex by remember { mutableStateOf(0) }
 
     Scaffold(
         bottomBar = {
-            BottomAppBar( modifier = Modifier.height(130.dp).clip(RoundedCornerShape(16.dp)) ,
+            BottomAppBar( modifier = Modifier
+                .height(130.dp)
+                .clip(RoundedCornerShape(16.dp)) ,
                 content = {
                     Column {
                         TabRow(
                             selectedTabIndex = tabIndex,
-                            containerColor = MaterialTheme.colorScheme.background, // To make it transparent within BottomAppBar
+                            containerColor = MaterialTheme.colorScheme.background,
                             contentColor = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.clip(RoundedCornerShape(12.dp)) // Apply rounded corners with 16dp radius
+                            modifier = Modifier.clip(RoundedCornerShape(12.dp))
                         ) {
                             titles.forEachIndexed { index, title ->
                                 Tab(
@@ -130,7 +167,9 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, context: Cont
                                 .fillMaxWidth()
                                 ){
                             IconButton(onClick = {
-                                navController.navigate("FavoritesScreen") }, modifier = Modifier.weight(1f).fillMaxHeight()) {
+                                navController.navigate("FavoritesScreen") }, modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()) {
                                 Icon(Icons.Filled.Favorite, contentDescription = "Favorites Button", modifier = Modifier.graphicsLayer {
                                     scaleX = 1.4f
                                     scaleY = 1.4f
@@ -138,7 +177,9 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, context: Cont
                                     tint = MaterialTheme.colorScheme.onBackground)
                             }
 
-                            IconButton(onClick = { navController.navigate("SelectorScreen") }, modifier = Modifier.weight(1f).fillMaxHeight()) {
+                            IconButton(onClick = { navController.navigate("SelectorScreen") }, modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()) {
                                 Icon(Icons.Filled.Menu, contentDescription = "SelectorScreen", modifier = Modifier.graphicsLayer {
                                     scaleX = 1.4f
                                     scaleY = 1.4f
@@ -146,7 +187,9 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, context: Cont
                                     tint = MaterialTheme.colorScheme.onBackground)
                             }
 
-                            IconButton(onClick = { viewModel.shareText(allMannaTexts[pagerState.currentPage])}, modifier = Modifier.weight(1f).fillMaxHeight()) {
+                            IconButton(onClick = { viewModel.shareText(allMannaTexts[pagerState.currentPage])}, modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight()) {
                                 Icon(Icons.Filled.Share, contentDescription = "Share Button", modifier = Modifier.graphicsLayer {
                                     scaleX = 1.4f
                                     scaleY = 1.4f
@@ -249,8 +292,8 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, context: Cont
                                             modifier = Modifier
                                                 .align(Alignment.CenterHorizontally)
                                                 .padding(
-                                                    end = 6.dp,
-                                                    start = 6.dp,
+                                                    end = 10.dp,
+                                                    start = 10.dp,
                                                     top = 6.dp
                                                 )
                                                 .verticalScroll(rememberScrollState())
@@ -259,7 +302,7 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, context: Cont
 
                                     1 -> {
                                         Text(
-                                            text = "${mannaPage.bibleText}\r\n\r\n\r\n\r\n",  // Display the text from MannaTextEntity
+                                            text = "${mannaPage.bibleText}\r\n\r\n\r\n\r\n",  // Display the bibleText from MannaTextEntity
                                             fontSize = 16.sp,
                                             modifier = Modifier
                                                 .align(Alignment.CenterHorizontally)
@@ -280,4 +323,11 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, context: Cont
          }
        }
     }
+}
+
+@Composable
+fun BackAlertDialog(){
+    AlertDialog(onDismissRequest = { /*TODO*/ }, buttons = {
+
+    })
 }

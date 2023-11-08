@@ -78,7 +78,7 @@ fun FavoritesScreen(viewModel: ViewModel, navController: NavController) {
             } else {
                 LazyColumn{
                     items(allMannaTexts) { item ->
-                        MannaRowItem(item, viewModel, navController)
+                        MannaRowItem(item, viewModel, navController, true)
                     }
                 }
             }
