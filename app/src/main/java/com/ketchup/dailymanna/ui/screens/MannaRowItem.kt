@@ -32,8 +32,8 @@ import com.ketchup.dailymanna.viewmodel.ViewModel
 fun MannaRowItem(item: MannaTextEntity, viewModel: ViewModel, navController: NavController, showButton: Boolean){
     Row(modifier = Modifier
         .fillMaxWidth().clickable {
-
             viewModel.savePageIndex(item.id)
+            viewModel.savePageBookID(item.bookID)
             navController.navigate("MainScreen")
 
         }) {

@@ -67,6 +67,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
@@ -104,7 +105,7 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIn
                 Text("Nie")
             }},
             icon = { Icon(painter = painterResource(id = R.drawable.baseline_book_24), contentDescription = "exitAppIcon", tint = MaterialTheme.colorScheme.onBackground) },
-            text = { Text(text = "Na pewno chcesz zamknąć aplikację?") })
+            text = { Text(text = "Zamknąć aplikację?", textAlign = TextAlign.Center, fontSize = 18.sp, modifier = Modifier.fillMaxWidth()) })
 
     }
 
@@ -120,6 +121,9 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIn
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect { page ->
             viewModel.savePageIndex(page)
+            if (allMannaTexts.isNotEmpty()){
+                    viewModel.savePageBookID(allMannaTexts[page].bookID)
+                }
         }
     }
 
@@ -136,7 +140,7 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIn
     Scaffold(
         bottomBar = {
             BottomAppBar( modifier = Modifier
-                .height(130.dp)
+                .height(140.dp)
                 .clip(RoundedCornerShape(16.dp)) ,
                 content = {
                     Column {
@@ -231,7 +235,8 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIn
                         elevation = CardDefaults.elevatedCardElevation(),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 2.dp, bottom = 140.dp, start = 8.dp, end = 8.dp)
+                            .fillMaxHeight()
+                            .padding(top = 2.dp, bottom = 150.dp, start = 8.dp, end = 8.dp)
                     ) {
                         Column {
                             Row(modifier = Modifier.fillMaxWidth()) {
@@ -247,6 +252,7 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIn
                                             start = 12.dp,
                                             bottom = 10.dp
                                         )
+                                        .verticalScroll(rememberScrollState())
                                 )
 
                                 val checkedState = remember { mutableStateOf(mannaPage.isFavorite) }
@@ -323,11 +329,4 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIn
          }
        }
     }
-}
-
-@Composable
-fun BackAlertDialog(){
-    AlertDialog(onDismissRequest = { /*TODO*/ }, buttons = {
-
-    })
 }

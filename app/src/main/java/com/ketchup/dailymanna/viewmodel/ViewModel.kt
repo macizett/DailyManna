@@ -61,6 +61,15 @@ class ViewModel(var mannaTextDao: MannaTextDao, var application: Application, va
         return index
     }
 
+    fun savePageBookID(index: Int) {
+        sharedPreferences.edit().putInt("pageID", index).apply()
+    }
+
+    fun getSavedPageBookID(): Int {
+        var index = sharedPreferences.getInt("pageID", 0)
+        return index
+    }
+
     fun shareText(mannaText: MannaTextEntity) {
         val sharedText = "${mannaText.title}\r\n\r\nFragment:\r\n\r\n${mannaText.bibleText}\r\n\r\n\r\nRozważanie:\r\n\r\n${mannaText.text}\r\n\r\n\r\n".trimIndent()
 

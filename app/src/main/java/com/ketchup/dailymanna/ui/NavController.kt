@@ -21,11 +21,11 @@ fun NavController(viewModel: ViewModel) {
         )}
 
         composable("FavoritesScreen") {
-            FavoritesScreen(viewModel = viewModel, navController)
+            FavoritesScreen(viewModel, navController)
         }
 
         composable("SelectorScreen") {
-            SelectorScreen(viewModel = viewModel, navController = navController)
+            SelectorScreen(viewModel, navController)
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.ketchup.dailymanna.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
@@ -45,7 +47,7 @@ fun SelectorScreen(viewModel: ViewModel, navController: NavController){
         "Dzieje Apostolskie",
         "List do Rzymian",
         "Pierwszy list do Koryntian",
-        "Drugi List do Koryntian",
+        "Drugi list do Koryntian",
         "List do Galacjan",
         "List do Efezjan",
         "List do Filipian",
@@ -70,7 +72,14 @@ fun SelectorScreen(viewModel: ViewModel, navController: NavController){
     val allMannaTexts by viewModel.allMannaTexts.observeAsState(initial = emptyList())
 
     var expanded by remember { mutableStateOf(false) }
-    var selectedIndex by remember { mutableStateOf(0) }
+
+    var id = viewModel.getSavedPageBookID()
+
+    if(expanded){
+        BackHandler(enabled = true) {
+            expanded = false
+        }
+    }
 
     LaunchedEffect(key1 = "loadFavoriteTexts") {
         viewModel.allMannaTexts
@@ -108,16 +117,25 @@ fun SelectorScreen(viewModel: ViewModel, navController: NavController){
                         .fillMaxWidth()
                         .clickable { expanded = true }
                 ) {
-                    Text(text = bookNamesList[selectedIndex], fontSize = 20.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp, bottom = 8.dp))
+
+                    Text(text = bookNamesList[id],
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp),
+                        textAlign = TextAlign.Center)
+
                         DropdownMenu(
                             expanded = expanded,
                             onDismissRequest = { expanded = false },
                             properties = PopupProperties(focusable = false),
-                            modifier = Modifier.fillMaxWidth().padding(top = 5.dp, bottom = 10.dp, start = 8.dp, end = 8.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 5.dp, bottom = 10.dp, start = 8.dp, end = 8.dp)
                         ) {
                             bookNamesList.forEachIndexed { index, s ->
                                 DropdownMenuItem(onClick = {
-                                    selectedIndex = index
+                                    id = index
+                                    viewModel.savePageBookID(id)
                                     expanded = false
                                 }) {
                                     Text(text = s, fontSize = 16.sp)
@@ -145,7 +163,7 @@ fun SelectorScreen(viewModel: ViewModel, navController: NavController){
                 .padding(top = 5.dp, bottom = 10.dp, start = 8.dp, end = 8.dp)
         ) {
             LazyColumn(Modifier.fillMaxSize()) {
-                items(allMannaTexts.filter { it.bookID == selectedIndex+1 }) {
+                items(allMannaTexts.filter { it.bookID == id }) {
                     MannaRowItem(item = it, viewModel = viewModel, navController = navController, showButton = false)
                 }
             }
