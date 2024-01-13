@@ -3,6 +3,7 @@ package com.ketchup.dailymanna.viewmodel
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.speech.tts.TextToSpeech
 import androidx.core.content.edit
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -18,8 +19,9 @@ import com.ketchup.dailymanna.repositories.MannaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
-class ViewModel(var mannaTextDao: MannaTextDao, var application: Application, var context: Context) : ViewModel() {
+class ViewModel(var mannaTextDao: MannaTextDao, var application: Application, var context: Context, var textToSpeech: TextToSpeech) : ViewModel() {
 
     private val _allMannaTexts = MutableLiveData<List<MannaTextEntity>>()
     val allMannaTexts: LiveData<List<MannaTextEntity>> = _allMannaTexts
@@ -81,6 +83,14 @@ class ViewModel(var mannaTextDao: MannaTextDao, var application: Application, va
 
         val shareIntent = Intent.createChooser(sendIntent, null)
         context.startActivity(shareIntent)
+    }
+
+    fun readText(text: String){
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
+    }
+
+    fun stopReading(){
+        textToSpeech.stop()
     }
 }
 

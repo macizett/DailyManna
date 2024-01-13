@@ -2,6 +2,7 @@ package com.ketchup.dailymanna
 
 import android.content.Context
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,13 +18,22 @@ import com.ketchup.dailymanna.viewmodel.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
+
+    lateinit var textToSpeech: TextToSpeech
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        textToSpeech = TextToSpeech(this, TextToSpeech.OnInitListener { status ->
+            if (status != TextToSpeech.ERROR) {
+                textToSpeech.setLanguage(Locale.forLanguageTag("pl-PL"))
+            }
+        })
+
         val mannaDao = AppDatabase.getInstance(this).mannaTextDao()
-        val viewModel = ViewModel(mannaDao, application, this)
+        val viewModel = ViewModel(mannaDao, application, this, textToSpeech)
 
         val sharedPreferences = application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
 
@@ -32,7 +42,6 @@ class MainActivity : ComponentActivity() {
                     contentParser.parseAndInsertMannaPages(this@MainActivity, lifecycleScope,"MannaText.json", mannaDao)
                     withContext(Dispatchers.Main){
 
-                        sharedPreferences.edit().putInt("databaseStatement", 1).apply()
                         setContent {
                             DailyMannaTheme {
                                 Surface(
@@ -46,11 +55,7 @@ class MainActivity : ComponentActivity() {
                     }
             }
         }
-
-        if (sharedPreferences.getInt("databaseStatement", 0) == 0) {
             initializeDatabase()
-        }
-        else{
             setContent {
                 DailyMannaTheme {
                     // A surface container using the 'background' color from the theme
@@ -62,7 +67,14 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+    }
+
+    override fun onDestroy() {
+        if (textToSpeech.isSpeaking) {
+            textToSpeech.stop()
+            textToSpeech.shutdown()
         }
+        super.onDestroy()
     }
 }
 

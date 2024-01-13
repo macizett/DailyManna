@@ -32,7 +32,9 @@ object contentParser {
         }
 
         coroutineScope.launch(Dispatchers.IO){
-            dao.insertAll(mannaTextEntities)
+            if(dao.getAllMannaTexts().isEmpty()){
+                dao.insertAll(mannaTextEntities)
+            }
         }
     }
 }
