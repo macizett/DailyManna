@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity() {
         val mannaDao = AppDatabase.getInstance(this).mannaTextDao()
         val viewModel = ViewModel(mannaDao, application, this, textToSpeech)
 
-        val sharedPreferences = application.getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
 
         fun initializeDatabase() {
             lifecycleScope.launch(Dispatchers.IO) {

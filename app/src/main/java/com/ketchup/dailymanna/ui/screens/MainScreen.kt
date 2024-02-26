@@ -3,6 +3,7 @@
 package com.ketchup.dailymanna.ui.screens
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -66,14 +67,13 @@ import androidx.navigation.NavController
 import com.ketchup.dailymanna.R
 import com.ketchup.dailymanna.model.MannaTextEntity
 import com.ketchup.dailymanna.viewmodel.ViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 
 @Composable
-fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIndex: Int) {
-
-    var currentPage = 0
+fun MainScreen(navController: NavController, viewModel: ViewModel, initialPage: Int) {
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -112,19 +112,18 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIn
         allMannaTexts.size
     }
 
-    LaunchedEffect(pagerState) {
-        snapshotFlow { pagerState.currentPage }.collect { page ->
-            viewModel.savePageIndex(page)
-            currentPage = page
-            if (allMannaTexts.isNotEmpty()){
-                    viewModel.savePageBookID(allMannaTexts[page].bookID)
-                }
+    LaunchedEffect(key1 = "scrollTo"){
+        coroutineScope.launch {
+            pagerState.animateScrollToPage(initialPage)
         }
     }
 
-    LaunchedEffect(key1 = "scrollTo"){
-        coroutineScope.launch {
-            pagerState.animateScrollToPage(initialPageIndex)
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }.collect { page ->
+            if (allMannaTexts.isNotEmpty()){
+                    viewModel.savePageIndex(page)
+                    viewModel.savePageBookID(allMannaTexts[page].bookID)
+                }
         }
     }
 
@@ -194,8 +193,8 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIn
                                 onCheckedChange = {
                                     checkedStateSpk.value = !checkedStateSpk.value
                                     if (!viewModel.textToSpeech.isSpeaking){
-                                        viewModel.readText("Fragment:\r\n\r\n${allMannaTexts[currentPage]
-                                            .bibleText.replace(Regex("\\d+\\.?"), "")}\r\n\r\n Rozważanie: ${allMannaTexts[currentPage].text}")
+                                        viewModel.readText("Fragment:\r\n\r\n${allMannaTexts[pagerState.currentPage]
+                                            .bibleText.replace(Regex("\\d+\\.?"), "")}\r\n\r\n Rozważanie: ${allMannaTexts[pagerState.currentPage].text}")
                                     }
                                     else{
                                         viewModel.stopReading()
@@ -243,12 +242,14 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPageIn
                 ) {
                     CircularProgressIndicator()
                 }
-            } else {
+            }
+
+            else {
                 HorizontalPager(
                     state = pagerState,
                     beyondBoundsPageCount = 3
                 ) { page ->
-                    val mannaPage = allMannaTexts[page]
+                    val mannaPage = allMannaTexts[pagerState.currentPage]
 
                     Card(
                         shape = RoundedCornerShape(8.dp),

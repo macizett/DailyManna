@@ -17,7 +17,7 @@ fun NavController(viewModel: ViewModel) {
         composable("MainScreen") { MainScreen(
             navController = navController,
             viewModel = viewModel,
-            initialPageIndex =  viewModel.getSavedPageIndex()
+            initialPage =  viewModel.getSavedPageIndex()
         )}
 
         composable("FavoritesScreen") {
