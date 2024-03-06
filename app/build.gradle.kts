@@ -12,8 +12,8 @@ android {
         applicationId = "com.ketchup.dailymanna"
         minSdk = 26
         targetSdk = 34
-        versionCode = 5
-        versionName = "2.3"
+        versionCode = 6
+        versionName = "2.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -76,5 +76,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+
+    implementation("io.insert-koin:koin-androidx-compose:3.5.0")
+    implementation ("io.insert-koin:koin-android:3.5.0")
 
 }

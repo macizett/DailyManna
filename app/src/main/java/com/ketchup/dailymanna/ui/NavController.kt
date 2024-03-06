@@ -1,6 +1,5 @@
 package com.ketchup.dailymanna.ui
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -8,24 +7,26 @@ import androidx.navigation.compose.composable
 import com.ketchup.dailymanna.ui.screens.FavoritesScreen
 import com.ketchup.dailymanna.ui.screens.MainScreen
 import com.ketchup.dailymanna.ui.screens.SelectorScreen
-import com.ketchup.dailymanna.viewmodel.ViewModel
+import com.ketchup.dailymanna.viewmodel.MannaViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun NavController(viewModel: ViewModel) {
+fun NavController(mannaViewModel: MannaViewModel = koinViewModel()) {
+
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "MainScreen"){
         composable("MainScreen") { MainScreen(
             navController = navController,
-            viewModel = viewModel,
-            initialPage =  viewModel.getSavedPageIndex()
+            mannaViewModel = mannaViewModel,
+            initialPage =  mannaViewModel.getSavedPageIndex()
         )}
 
         composable("FavoritesScreen") {
-            FavoritesScreen(viewModel, navController)
+            FavoritesScreen(mannaViewModel, navController)
         }
 
         composable("SelectorScreen") {
-            SelectorScreen(viewModel, navController)
+            SelectorScreen(mannaViewModel, navController)
         }
     }
 }

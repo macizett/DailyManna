@@ -3,7 +3,6 @@
 package com.ketchup.dailymanna.ui.screens
 
 import android.app.Activity
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -29,7 +28,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
@@ -65,15 +63,14 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import com.ketchup.dailymanna.R
-import com.ketchup.dailymanna.model.MannaTextEntity
-import com.ketchup.dailymanna.viewmodel.ViewModel
-import kotlinx.coroutines.delay
+import com.ketchup.dailymanna.viewmodel.MannaViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 
 @Composable
-fun MainScreen(navController: NavController, viewModel: ViewModel, initialPage: Int) {
+fun MainScreen(navController: NavController, mannaViewModel: MannaViewModel, initialPage: Int) {
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -104,10 +101,10 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPage: 
     }
 
     LaunchedEffect(key1 = "loadTexts") {
-        viewModel.loadAllMannaTexts()
+        mannaViewModel.loadAllMannaTexts()
     }
 
-    val allMannaTexts by viewModel.allMannaTexts.observeAsState(initial = emptyList())
+    val allMannaTexts by mannaViewModel.allMannaTexts.observeAsState(initial = emptyList())
     val pagerState = rememberPagerState {
         allMannaTexts.size
     }
@@ -121,8 +118,8 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPage: 
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect { page ->
             if (allMannaTexts.isNotEmpty()){
-                    viewModel.savePageIndex(page)
-                    viewModel.savePageBookID(allMannaTexts[page].bookID)
+                    mannaViewModel.savePageIndex(page)
+                    mannaViewModel.savePageBookID(allMannaTexts[page].bookID)
                 }
         }
     }
@@ -192,12 +189,12 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPage: 
                                 checked = checkedStateSpk.value,
                                 onCheckedChange = {
                                     checkedStateSpk.value = !checkedStateSpk.value
-                                    if (!viewModel.textToSpeech.isSpeaking){
-                                        viewModel.readText("Fragment:\r\n\r\n${allMannaTexts[pagerState.currentPage]
+                                    if (!mannaViewModel.textToSpeech.isSpeaking){
+                                        mannaViewModel.readText("Fragment:\r\n\r\n${allMannaTexts[pagerState.currentPage]
                                             .bibleText.replace(Regex("\\d+\\.?"), "")}\r\n\r\n Rozważanie: ${allMannaTexts[pagerState.currentPage].text}")
                                     }
                                     else{
-                                        viewModel.stopReading()
+                                        mannaViewModel.stopReading()
                                     }
                                 },
                                 modifier = Modifier
@@ -268,16 +265,26 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPage: 
                             bottomBar = {
                                 BottomAppBar( modifier = Modifier
                                     .height(60.dp)
-                                    .clip(RoundedCornerShape(bottomEnd = 8.dp, bottomStart = 8.dp, topEnd = 16.dp, topStart = 16.dp)) ,
+                                    .clip(
+                                        RoundedCornerShape(
+                                            bottomEnd = 8.dp,
+                                            bottomStart = 8.dp,
+                                            topEnd = 16.dp,
+                                            topStart = 16.dp
+                                        )
+                                    ) ,
                                     content = {
-                                        Row(modifier = Modifier.fillMaxWidth().height(60.dp).align(Alignment.CenterVertically)) {
+                                        Row(modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(60.dp)
+                                            .align(Alignment.CenterVertically)) {
                                             val checkedStateFav = remember { mutableStateOf(mannaPage.isFavorite) }
 
                                             IconToggleButton(
                                                 checked = checkedStateFav.value,
                                                 onCheckedChange = {
                                                     checkedStateFav.value = it
-                                                    viewModel.setFavorite(mannaPage, checkedStateFav.value)
+                                                    mannaViewModel.setFavorite(mannaPage, checkedStateFav.value)
                                                 },
                                                 modifier = Modifier
                                                     .align(Alignment.CenterVertically)
@@ -300,7 +307,7 @@ fun MainScreen(navController: NavController, viewModel: ViewModel, initialPage: 
                                                 )
                                             }
 
-                                            IconButton(onClick = {viewModel.shareText(allMannaTexts[pagerState.currentPage])}, modifier = Modifier
+                                            IconButton(onClick = {mannaViewModel.shareText(allMannaTexts[pagerState.currentPage])}, modifier = Modifier
                                                 .weight(1f)
                                                 .fillMaxHeight()
                                                 .align(Alignment.CenterVertically)) {

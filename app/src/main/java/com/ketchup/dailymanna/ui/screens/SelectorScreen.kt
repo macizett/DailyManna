@@ -33,18 +33,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
-import com.ketchup.dailymanna.viewmodel.ViewModel
+import com.ketchup.dailymanna.viewmodel.MannaViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SelectorScreen(viewModel: ViewModel, navController: NavController){
+fun SelectorScreen(mannaViewModel: MannaViewModel, navController: NavController){
 
     val bookNamesList = listOf(
         "Ewangelia Mateusza",
@@ -76,11 +75,11 @@ fun SelectorScreen(viewModel: ViewModel, navController: NavController){
         "Objawienie Janowi"
     )
 
-    val allMannaTexts by viewModel.allMannaTexts.observeAsState(initial = emptyList())
+    val allMannaTexts by mannaViewModel.allMannaTexts.observeAsState(initial = emptyList())
 
     var expanded by remember { mutableStateOf(false) }
 
-    var id = viewModel.getSavedPageBookID()
+    var id = mannaViewModel.getSavedPageBookID()
 
     if(expanded){
         BackHandler(enabled = true) {
@@ -89,7 +88,7 @@ fun SelectorScreen(viewModel: ViewModel, navController: NavController){
     }
 
     LaunchedEffect(key1 = "loadFavoriteTexts") {
-        viewModel.allMannaTexts
+        mannaViewModel.allMannaTexts
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -131,10 +130,12 @@ fun SelectorScreen(viewModel: ViewModel, navController: NavController){
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp),
                             textAlign = TextAlign.Center)
-                        Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "arrow drop down", modifier = Modifier.align(Alignment.CenterVertically).graphicsLayer {
-                            scaleX = 1.2f
-                            scaleY = 1.2f
-                        }, tint = MaterialTheme.colorScheme.onBackground)
+                        Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "arrow drop down", modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .graphicsLayer {
+                                scaleX = 1.2f
+                                scaleY = 1.2f
+                            }, tint = MaterialTheme.colorScheme.onBackground)
                     }
 
                         DropdownMenu(
@@ -148,7 +149,7 @@ fun SelectorScreen(viewModel: ViewModel, navController: NavController){
                             bookNamesList.forEachIndexed { index, s ->
                                 DropdownMenuItem(onClick = {
                                     id = index
-                                    viewModel.savePageBookID(id)
+                                    mannaViewModel.savePageBookID(id)
                                     expanded = false
                                 }) {
                                     Text(text = s, fontSize = 16.sp)
@@ -177,7 +178,7 @@ fun SelectorScreen(viewModel: ViewModel, navController: NavController){
         ) {
             LazyColumn(Modifier.fillMaxSize()) {
                 items(allMannaTexts.filter { it.bookID == id }) {
-                    MannaRowItem(item = it, viewModel = viewModel, navController = navController, showButton = false)
+                    MannaRowItem(item = it, mannaViewModel = mannaViewModel, navController = navController, showButton = false)
                 }
             }
         }

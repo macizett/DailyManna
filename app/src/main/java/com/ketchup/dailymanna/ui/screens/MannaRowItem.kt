@@ -20,20 +20,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.ketchup.dailymanna.model.MannaTextEntity
-import com.ketchup.dailymanna.viewmodel.ViewModel
+import com.ketchup.dailymanna.viewmodel.MannaViewModel
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun MannaRowItem(item: MannaTextEntity, viewModel: ViewModel, navController: NavController, showButton: Boolean){
+fun MannaRowItem(item: MannaTextEntity, mannaViewModel: MannaViewModel, navController: NavController, showButton: Boolean){
     Row(modifier = Modifier
-        .fillMaxWidth().clickable {
-            viewModel.savePageIndex(item.id)
-            viewModel.savePageBookID(item.bookID)
+        .fillMaxWidth()
+        .clickable {
+            mannaViewModel.savePageIndex(item.id)
+            mannaViewModel.savePageBookID(item.bookID)
             navController.navigate("MainScreen")
 
         }) {
@@ -50,7 +51,7 @@ fun MannaRowItem(item: MannaTextEntity, viewModel: ViewModel, navController: Nav
                 checked = checkedState.value,
                 onCheckedChange = {
                     checkedState.value = it
-                    viewModel.setFavorite(item, checkedState.value)
+                    mannaViewModel.setFavorite(item, checkedState.value)
                 },
                 modifier = Modifier.align(Alignment.CenterVertically) // Align the button vertically
             ) {

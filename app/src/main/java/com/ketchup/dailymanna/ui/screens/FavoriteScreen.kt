@@ -23,15 +23,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.ketchup.dailymanna.viewmodel.ViewModel
+import com.ketchup.dailymanna.viewmodel.MannaViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun FavoritesScreen(viewModel: ViewModel, navController: NavController) {
+fun FavoritesScreen(mannaViewModel: MannaViewModel, navController: NavController) {
 
-    val allMannaTexts by viewModel.allFavoriteMannaTexts.observeAsState(initial = emptyList())
+    val allMannaTexts by mannaViewModel.allFavoriteMannaTexts.observeAsState(initial = emptyList())
 
     LaunchedEffect(key1 = "loadFavoriteTexts") {
-        viewModel.getAllFavorites()
+        mannaViewModel.getAllFavorites()
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -80,7 +81,7 @@ fun FavoritesScreen(viewModel: ViewModel, navController: NavController) {
             } else {
                 LazyColumn{
                     items(allMannaTexts) { item ->
-                        MannaRowItem(item, viewModel, navController, true)
+                        MannaRowItem(item, mannaViewModel, navController, true)
                     }
                 }
             }

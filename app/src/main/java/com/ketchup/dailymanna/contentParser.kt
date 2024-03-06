@@ -10,7 +10,7 @@ import org.json.JSONObject
 
 object contentParser {
 
-    fun parseAndInsertMannaPages(context: Context, coroutineScope: LifecycleCoroutineScope, jsonFileName: String, dao: MannaTextDao) {
+    fun parseAndInsertMannaPages(context: Context, coroutineScope: LifecycleCoroutineScope, jsonFileName: String = "MannaText.json", dao: MannaTextDao) {
         val jsonString = context.assets.open(jsonFileName).bufferedReader().use {
             it.readText()
         }
