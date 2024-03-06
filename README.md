@@ -1,12 +1,13 @@
 # DailyManna
 DailyManna is an electronic version of a book from RLCH called "Manna na co dzień" that provides You a daily dose of Bible reading with some reflections.
 
-I used:
+Tech stack:
 - MVVM Architecture,
 - Jetpack Compose
 - Kotlin
 - Room Database
 - Shared Preferences
+- Koin dependency injection
 
 And many more.
 
