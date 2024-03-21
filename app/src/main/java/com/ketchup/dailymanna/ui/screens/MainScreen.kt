@@ -3,6 +3,7 @@
 package com.ketchup.dailymanna.ui.screens
 
 import android.app.Activity
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -71,7 +72,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 
 @Composable
-fun MainScreen(navController: NavController, mannaViewModel: MannaViewModel, initialPage: Int) {
+fun MainScreen(navController: NavController, mannaViewModel: MannaViewModel, initialPage: Int, context: Context) {
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -308,7 +309,7 @@ fun MainScreen(navController: NavController, mannaViewModel: MannaViewModel, ini
                                                 )
                                             }
 
-                                            IconButton(onClick = {mannaViewModel.shareText(allMannaTexts[pagerState.currentPage])}, modifier = Modifier
+                                            IconButton(onClick = {mannaViewModel.shareText(allMannaTexts[pagerState.currentPage], context)}, modifier = Modifier
                                                 .weight(1f)
                                                 .fillMaxHeight()
                                                 .align(Alignment.CenterVertically)) {

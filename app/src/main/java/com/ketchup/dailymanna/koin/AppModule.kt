@@ -21,7 +21,6 @@ val appModule = module {
     viewModel {
         MannaViewModel(
             mannaTextDao = get(),
-            context = get(),
             sharedPreferences = get(),
             textToSpeech = get()
         )

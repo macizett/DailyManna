@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.speech.tts.TextToSpeech
+import androidx.core.view.ContentInfoCompat.Flags
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 
 
 
-class MannaViewModel(var mannaTextDao: MannaTextDao, var context: Context, var sharedPreferences: SharedPreferences, var textToSpeech: TextToSpeech) : ViewModel() {
+class MannaViewModel(var mannaTextDao: MannaTextDao, var sharedPreferences: SharedPreferences, var textToSpeech: TextToSpeech) : ViewModel() {
 
     private val _allMannaTexts = MutableLiveData<List<MannaTextEntity>>()
     val allMannaTexts: LiveData<List<MannaTextEntity>> = _allMannaTexts
@@ -64,11 +65,12 @@ class MannaViewModel(var mannaTextDao: MannaTextDao, var context: Context, var s
         return index
     }
 
-    fun shareText(mannaText: MannaTextEntity) {
+    fun shareText(mannaText: MannaTextEntity, context: Context) {
         val sharedText = "${mannaText.title}\r\n\r\nFragment:\r\n\r\n${mannaText.bibleText}\r\n\r\n\r\nRozważanie:\r\n\r\n${mannaText.text}\r\n\r\n\r\n".trimIndent()
 
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
             putExtra(Intent.EXTRA_TEXT, sharedText)
             type = "text/plain"
         }
