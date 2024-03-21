@@ -33,12 +33,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
+import com.ketchup.dailymanna.R
 import com.ketchup.dailymanna.viewmodel.MannaViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -46,34 +48,35 @@ import org.koin.androidx.compose.koinViewModel
 fun SelectorScreen(mannaViewModel: MannaViewModel, navController: NavController){
 
     val bookNamesList = listOf(
-        "Ewangelia Mateusza",
-        "Ewangelia Marka",
-        "Ewangelia Łukasza",
-        "Ewangelia Jana",
-        "Dzieje Apostolskie",
-        "List do Rzymian",
-        "Pierwszy list do Koryntian",
-        "Drugi list do Koryntian",
-        "List do Galacjan",
-        "List do Efezjan",
-        "List do Filipian",
-        "List do Kolosan",
-        "Pierwszy list do Tesaloniczan",
-        "Drugi list do Tesaloniczan",
-        "Pierwszy list do Tymoteusza",
-        "Drugi list do Tymoteusza",
-        "List do Tytusa",
-        "List do Filemona",
-        "List do Hebrajczyków",
-        "List Jakuba",
-        "Pierwszy list Piotra",
-        "Drugi list Piotra",
-        "Pierwszy list Jana",
-        "Drugi list Jana",
-        "Trzeci list Jana",
-        "List Judy",
-        "Objawienie Janowi"
+        R.string.gospel_of_matthew,
+        R.string.gospel_of_mark,
+        R.string.gospel_of_luke,
+        R.string.gospel_of_john,
+        R.string.acts_of_the_apostles,
+        R.string.letter_to_the_romans,
+        R.string.first_letter_to_the_corinthians,
+        R.string.second_letter_to_the_corinthians,
+        R.string.letter_to_the_galatians,
+        R.string.letter_to_the_ephesians,
+        R.string.letter_to_the_philippians,
+        R.string.letter_to_the_colossians,
+        R.string.first_letter_to_the_thessalonians,
+        R.string.second_letter_to_the_thessalonians,
+        R.string.first_letter_to_timothy,
+        R.string.second_letter_to_timothy,
+        R.string.letter_to_titus,
+        R.string.letter_to_philemon,
+        R.string.letter_to_the_hebrews,
+        R.string.letter_of_james,
+        R.string.first_letter_of_peter,
+        R.string.second_letter_of_peter,
+        R.string.first_letter_of_john,
+        R.string.second_letter_of_john,
+        R.string.third_letter_of_john,
+        R.string.letter_of_jude,
+        R.string.revelation_to_john
     )
+
 
     val allMannaTexts by mannaViewModel.allMannaTexts.observeAsState(initial = emptyList())
 
@@ -125,7 +128,7 @@ fun SelectorScreen(mannaViewModel: MannaViewModel, navController: NavController)
                 ) {
 
                     Row {
-                        Text(text = bookNamesList[id],
+                        Text(text = stringResource(bookNamesList[id]),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp),
@@ -152,7 +155,7 @@ fun SelectorScreen(mannaViewModel: MannaViewModel, navController: NavController)
                                     mannaViewModel.savePageBookID(id)
                                     expanded = false
                                 }) {
-                                    Text(text = s, fontSize = 16.sp)
+                                    Text(text = stringResource(s), fontSize = 16.sp)
                                 }
 
                                 if (index < bookNamesList.size-1){

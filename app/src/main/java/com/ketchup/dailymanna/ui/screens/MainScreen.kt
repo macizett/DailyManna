@@ -43,6 +43,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -55,6 +56,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -65,7 +67,6 @@ import androidx.navigation.NavController
 import com.ketchup.dailymanna.R
 import com.ketchup.dailymanna.viewmodel.MannaViewModel
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 
@@ -88,15 +89,15 @@ fun MainScreen(navController: NavController, mannaViewModel: MannaViewModel, ini
             confirmButton = {TextButton(
                 onClick = { ActivityCompat.finishAffinity(context as Activity) }
             ) {
-                Text("Tak")
+                Text(stringResource(id = R.string.yes))
             } },
             dismissButton = {TextButton(
                 onClick = { showExitConfirmationDialog = false }
             ) {
-                Text("Nie")
+                Text(stringResource(id = R.string.no))
             }},
             icon = { Icon(painter = painterResource(id = R.drawable.baseline_book_24), contentDescription = "exitAppIcon", tint = MaterialTheme.colorScheme.onBackground) },
-            text = { Text(text = "Zamknąć aplikację?", textAlign = TextAlign.Center, fontSize = 18.sp, modifier = Modifier.fillMaxWidth()) })
+            text = { Text(text = stringResource(id = R.string.closeAppQuestion), textAlign = TextAlign.Center, fontSize = 18.sp, modifier = Modifier.fillMaxWidth()) })
 
     }
 
@@ -124,9 +125,9 @@ fun MainScreen(navController: NavController, mannaViewModel: MannaViewModel, ini
         }
     }
 
-    val titles = listOf("Kartka", "Biblia")
+    val titles = listOf(stringResource(id = R.string.page), stringResource(id = R.string.bible))
     val tabIcons = listOf(R.drawable.baseline_menu_book_24, R.drawable.baseline_book_24)
-    var tabIndex by remember { mutableStateOf(0) }
+    var tabIndex by remember { mutableIntStateOf(0) }
 
 
     Scaffold(
@@ -190,8 +191,8 @@ fun MainScreen(navController: NavController, mannaViewModel: MannaViewModel, ini
                                 onCheckedChange = {
                                     checkedStateSpk.value = !checkedStateSpk.value
                                     if (!mannaViewModel.textToSpeech.isSpeaking){
-                                        mannaViewModel.readText("Fragment:\r\n\r\n${allMannaTexts[pagerState.currentPage]
-                                            .bibleText.replace(Regex("\\d+\\.?"), "")}\r\n\r\n Rozważanie: ${allMannaTexts[pagerState.currentPage].text}")
+                                        mannaViewModel.readText("${context.resources.getString(R.string.meditating)}\r\n\r\n${allMannaTexts[pagerState.currentPage]
+                                            .bibleText.replace(Regex("\\d+\\.?"), "")}\r\n\r\n ${context.resources.getString(R.string.meditating)} ${allMannaTexts[pagerState.currentPage].text}")
                                     }
                                     else{
                                         mannaViewModel.stopReading()

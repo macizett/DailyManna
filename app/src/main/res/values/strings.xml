@@ -1,4 +1,41 @@
 <resources>
     <string name="app_name">Manna</string>
     <string name="preference_file_key" />
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
+    <string name="closeAppQuestion">Zamknąć aplikację?</string>
+    <string name="meditating">Rozważanie:</string>
+    <string name="fragment">Fragment:</string>
+    <string name="favorites">Ulubione</string>
+    <string name="no_favorites">Brak ulubionych :(</string>
+    <string name="page">Kartka</string>
+    <string name="bible">Biblia</string>
+
+    <string name="gospel_of_matthew">Ewangelia Mateusza</string>
+    <string name="gospel_of_mark">Ewangelia Marka</string>
+    <string name="gospel_of_luke">Ewangelia Łukasza</string>
+    <string name="gospel_of_john">Ewangelia Jana</string>
+    <string name="acts_of_the_apostles">Dzieje Apostolskie</string>
+    <string name="letter_to_the_romans">List do Rzymian</string>
+    <string name="first_letter_to_the_corinthians">Pierwszy list do Koryntian</string>
+    <string name="second_letter_to_the_corinthians">Drugi list do Koryntian</string>
+    <string name="letter_to_the_galatians">List do Galacjan</string>
+    <string name="letter_to_the_ephesians">List do Efezjan</string>
+    <string name="letter_to_the_philippians">List do Filipian</string>
+    <string name="letter_to_the_colossians">List do Kolosan</string>
+    <string name="first_letter_to_the_thessalonians">Pierwszy list do Tesaloniczan</string>
+    <string name="second_letter_to_the_thessalonians">Drugi list do Tesaloniczan</string>
+    <string name="first_letter_to_timothy">Pierwszy list do Tymoteusza</string>
+    <string name="second_letter_to_timothy">Drugi list do Tymoteusza</string>
+    <string name="letter_to_titus">List do Tytusa</string>
+    <string name="letter_to_philemon">List do Filemona</string>
+    <string name="letter_to_the_hebrews">List do Hebrajczyków</string>
+    <string name="letter_of_james">List Jakuba</string>
+    <string name="first_letter_of_peter">Pierwszy list Piotra</string>
+    <string name="second_letter_of_peter">Drugi list Piotra</string>
+    <string name="first_letter_of_john">Pierwszy list Jana</string>
+    <string name="second_letter_of_john">Drugi list Jana</string>
+    <string name="third_letter_of_john">Trzeci list Jana</string>
+    <string name="letter_of_jude">List Judy</string>
+    <string name="revelation_to_john">Objawienie Janowi</string>
 </resources>

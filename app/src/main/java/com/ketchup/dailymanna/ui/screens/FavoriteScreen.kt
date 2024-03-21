@@ -18,11 +18,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.ketchup.dailymanna.R
 import com.ketchup.dailymanna.viewmodel.MannaViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -38,7 +40,7 @@ fun FavoritesScreen(mannaViewModel: MannaViewModel, navController: NavController
     Column(modifier = Modifier.fillMaxSize()) {
 
         Text(
-            text = "Ulubione",
+            text = stringResource(R.string.favorites),
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
@@ -69,7 +71,7 @@ fun FavoritesScreen(mannaViewModel: MannaViewModel, navController: NavController
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Brak ulubionych :(",
+                        text = stringResource(R.string.no_favorites),
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.align(
